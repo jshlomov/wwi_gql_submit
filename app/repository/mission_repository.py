@@ -51,13 +51,15 @@ def get_mission_max_id():
 def update_mission_result(mission_id: int, updated_mission: Mission):
     with session_maker() as session:
         try:
-            mission = find_mission_by_id(mission_id)
+            mission = session.query(Mission).get(mission_id)
+            if mission is None:
+                raise SQLAlchemyError("NOT FOUND")
             mission.aircraft_returned = updated_mission.aircraft_returned
             mission.aircraft_failed = updated_mission.aircraft_failed
             mission.aircraft_damaged = updated_mission.aircraft_damaged
             mission.aircraft_lost = updated_mission.aircraft_lost
             session.commit()
-            # session.refresh(mission)
+            session.refresh(mission)
             return mission
         except SQLAlchemyError as e:
             session.rollback()
@@ -67,6 +69,8 @@ def delete_mission(mission_id: int):
     with session_maker() as session:
         try:
             mission = find_mission_by_id(mission_id)
+            if mission is None:
+                raise SQLAlchemyError("NOT FOUND")
             session.delete(mission)
             session.commit()
             return mission
