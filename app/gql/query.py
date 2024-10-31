@@ -13,6 +13,8 @@ class Query(ObjectType):
     mission_by_id = Field(MissionType, mission_id=Int())
     missions_by_dates = List(MissionType, start=Date(), end=Date())
     missions_by_country = List(MissionType, country=String())
+    missions_by_industry = List(MissionType, industry=String())
+    missions_by_target_type = List(MissionType, target_type=String())
 
     @staticmethod
     def resolve_missions(root, info):
@@ -22,10 +24,7 @@ class Query(ObjectType):
     @staticmethod
     def resolve_mission_by_id(root, info, mission_id):
        res = mr.find_mission_by_id(mission_id)
-       if res is not Nothing:
-           return res.unwrap()
-       else:
-           raise GraphQLError("emp not found")
+       return res.unwrap()
 
     @staticmethod
     def resolve_missions_by_dates(root, info, start, end):
@@ -36,6 +35,12 @@ class Query(ObjectType):
         return mr.find_missions_by_country(country)
 
     @staticmethod
+    def resolve_missions_by_industry(root, info, industry):
+        return mr.find_missions_by_industry(industry)
+
+    @staticmethod
+    def resolve_missions_by_target_type(root, info, target_type):
+        return mr.find_missions_by_target_type(target_type)
 
 
 
