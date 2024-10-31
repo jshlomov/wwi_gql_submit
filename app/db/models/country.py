@@ -9,4 +9,4 @@ class Country(Base):
     country_id = Column(Integer, primary_key=True, autoincrement=True)
     country_name = Column(String)
 
-    cities = relationship('Country', back_populates='user', cascade='all, delete-orphan')
+    cities = relationship('City', back_populates='country', cascade='all, delete-orphan')
