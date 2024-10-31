@@ -1,5 +1,6 @@
-from returns.maybe import Maybe
+from returns.maybe import Maybe, Nothing
 from sqlalchemy import func
+from sqlalchemy.exc import SQLAlchemyError
 
 from app.db.database import session_maker
 from app.db.models import Target, City, Country, TargetType
