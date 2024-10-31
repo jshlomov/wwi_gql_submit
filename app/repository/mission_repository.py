@@ -4,6 +4,7 @@ from app.db.database import session_maker
 from app.db.models import Target, City, Country, TargetType
 from app.db.models.mission import Mission
 
+
 def find_mission_by_id(mission_id: int) -> Maybe[Mission]:
     with session_maker() as session:
         return Maybe.from_optional(session.get(Mission, mission_id))
@@ -30,5 +31,13 @@ def find_missions_by_target_type(target_type):
                 .join(TargetType)
                 .filter(TargetType.target_type_name == target_type)
                 .all())
+
+def create_mission(mission: dict):
+    with session_maker() as session:
+        mission_to_insert = Mission(**mission)
+        session.add(mission_to_insert)
+        session.commit()
+        session.refresh(mission_to_insert)
+        return mission_to_insert
 
 
