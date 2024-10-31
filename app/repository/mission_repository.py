@@ -4,6 +4,7 @@ from app.db.database import session_maker
 from app.db.models.mission import Mission
 
 
+
 def find_mission_by_id(mission_id: int) -> Maybe[Mission]:
     with session_maker() as session:
         return Maybe.from_optional(session.get(Mission, mission_id))
@@ -11,3 +12,7 @@ def find_mission_by_id(mission_id: int) -> Maybe[Mission]:
 def find_mission_between_dates(start, end):
     with session_maker() as session:
         return session.query(Mission).filter(Mission.mission_date.between(start,end)).all()
+
+def find_missions_by_country(country):
+    with session_maker() as session:
+        return session.query(Mission).filter(Mission.target.city.country.country_name == country).all()

@@ -4,7 +4,7 @@ from flask_graphql import GraphQLView
 from graphene import Schema
 
 from app.gql.query import Query
-from app.repository.mission_repository import find_mission_by_id
+from app.repository.mission_repository import find_mission_by_id, find_missions_by_country
 
 schema = Schema(query=Query)
 
@@ -20,5 +20,5 @@ app.add_url_rule(
 )
 
 if __name__ == '__main__':
-    res = find_mission_by_id(225)
+    # res = find_missions_by_country("GERMANY").unwrap()
     app.run()

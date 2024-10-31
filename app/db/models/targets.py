@@ -14,5 +14,5 @@ class Target(Base):
     target_priority = Column(String)
 
     mission = relationship('Mission', back_populates='target', lazy='immediate')
-    city = relationship('City', back_populates='targets')
+    city = relationship('City', back_populates='targets', lazy='immediate')
     target_type = relationship('TargetType', back_populates='targets')

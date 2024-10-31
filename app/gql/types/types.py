@@ -24,8 +24,7 @@ class MissionType(ObjectType):
     aircraft_failed  = Float()
     aircraft_damaged  = Float()
     aircraft_lost  = Float()
-
-    target = Field(lambda: TargetType)
+    target = List(lambda: TargetType)
 
 class CountryType(ObjectType):
     country_id = Int()

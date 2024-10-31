@@ -12,6 +12,8 @@ class Query(ObjectType):
     missions = List(MissionType)
     mission_by_id = Field(MissionType, mission_id=Int())
     missions_by_dates = List(MissionType, start=Date(), end=Date())
+    missions_by_country = List(MissionType, country=String())
+
     @staticmethod
     def resolve_missions(root, info):
        with session_maker() as session:
@@ -28,6 +30,14 @@ class Query(ObjectType):
     @staticmethod
     def resolve_missions_by_dates(root, info, start, end):
            return mr.find_mission_between_dates(start, end)
+
+    @staticmethod
+    def resolve_missions_by_country(root, info, country):
+        return mr.find_missions_by_country(country)
+
+    @staticmethod
+
+
 
     # @staticmethod
     # def resolve_jobs(root, info):
