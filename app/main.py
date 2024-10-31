@@ -1,12 +1,9 @@
 from flask import Flask
-from app.db.database import init_db
 from flask_graphql import GraphQLView
 from graphene import Schema
 
-from app.db.models import Mission
 from app.gql.mutations import Mutation
 from app.gql.query import Query
-from app.repository.mission_repository import create_mission, get_mission_max_id, update_mission_result
 
 schema = Schema(query=Query, mutation=Mutation)
 
