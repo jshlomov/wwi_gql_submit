@@ -1,4 +1,6 @@
+from flask import session
 from returns.maybe import Maybe, Nothing
+from returns.result import Result, Failure, Success
 from sqlalchemy import func
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -9,7 +11,7 @@ from app.db.models.mission import Mission
 
 def find_mission_by_id(mission_id: int) -> Maybe[Mission]:
     with session_maker() as session:
-        return Maybe.from_optional(session.get(Mission, mission_id))
+        return session.get(Mission, mission_id)
 
 def find_mission_between_dates(start, end):
     with session_maker() as session:
@@ -44,5 +46,32 @@ def create_mission(mission: Mission):
 def get_mission_max_id():
     with session_maker() as session:
         return session.query(func.max(Mission.mission_id)).scalar() + 1
+
+
+def update_mission_result(mission_id: int, updated_mission: Mission):
+    with session_maker() as session:
+        try:
+            mission = find_mission_by_id(mission_id)
+            mission.aircraft_returned = updated_mission.aircraft_returned
+            mission.aircraft_failed = updated_mission.aircraft_failed
+            mission.aircraft_damaged = updated_mission.aircraft_damaged
+            mission.aircraft_lost = updated_mission.aircraft_lost
+            session.commit()
+            # session.refresh(mission)
+            return mission
+        except SQLAlchemyError as e:
+            session.rollback()
+            return str(e)
+
+def delete_mission(mission_id: int):
+    with session_maker() as session:
+        try:
+            mission = find_mission_by_id(mission_id)
+            session.delete(mission)
+            session.commit()
+            return mission
+        except SQLAlchemyError as e:
+            session.rollback()
+            return str(e)
 
 

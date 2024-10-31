@@ -3,10 +3,12 @@ from app.db.database import init_db
 from flask_graphql import GraphQLView
 from graphene import Schema
 
+from app.db.models import Mission
+from app.gql.mutations import Mutation
 from app.gql.query import Query
-from app.repository.mission_repository import find_mission_by_id, find_missions_by_country
+from app.repository.mission_repository import create_mission, get_mission_max_id, update_mission_result
 
-schema = Schema(query=Query)
+schema = Schema(query=Query, mutation=Mutation)
 
 app = Flask(__name__)
 
@@ -20,5 +22,4 @@ app.add_url_rule(
 )
 
 if __name__ == '__main__':
-    # res = find_missions_by_country("GERMANY").unwrap()
     app.run()

@@ -24,7 +24,7 @@ class Query(ObjectType):
     @staticmethod
     def resolve_mission_by_id(root, info, mission_id):
        res = mr.find_mission_by_id(mission_id)
-       return res.unwrap()
+       return res
 
     @staticmethod
     def resolve_missions_by_dates(root, info, start, end):
