@@ -1,4 +1,5 @@
 from returns.maybe import Maybe
+from sqlalchemy import func
 
 from app.db.database import session_maker
 from app.db.models import Target, City, Country, TargetType
@@ -32,12 +33,15 @@ def find_missions_by_target_type(target_type):
                 .filter(TargetType.target_type_name == target_type)
                 .all())
 
-def create_mission(mission: dict):
+def create_mission(mission: Mission):
     with session_maker() as session:
-        mission_to_insert = Mission(**mission)
-        session.add(mission_to_insert)
+        session.add(mission)
         session.commit()
-        session.refresh(mission_to_insert)
-        return mission_to_insert
+        session.refresh(mission)
+        return mission
+
+def get_mission_max_id():
+    with session_maker() as session:
+        return session.query(func.max(Mission.mission_id)).scalar() + 1
 
 
