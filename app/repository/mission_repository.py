@@ -10,4 +10,4 @@ def find_mission_by_id(mission_id: int) -> Maybe[Mission]:
 
 def find_mission_between_dates(start, end):
     with session_maker() as session:
-        return session.query(Mission).filter(start < Mission.mission_date < end).all()
+        return session.query(Mission).filter(Mission.mission_date.between(start,end)).all()
